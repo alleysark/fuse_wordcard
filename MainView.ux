@@ -1,0 +1,275 @@
+<App>
+	<Fuse.iOS.StatusBarConfig ux:Name="statusBarConfig" Style="Light" IsVisible="true" Animation="Slide" />
+
+	<FileImageSource ux:Global="ExpandButton" File="Assets/ViewExpandButton.png" />
+
+	<Font File="Assets/fonts/Roboto-Bold.ttf" ux:Global="RobotoBold"/>
+
+	<float4 ux:Global="ColorThemeSuperDark" ux:Value="#020E1C" />
+	<float4 ux:Global="ColorThemeVeryDark" ux:Value="#011321" />
+	<float4 ux:Global="ColorThemeDark" ux:Value="#0B2C47" />
+	<float4 ux:Global="ColorThemeDefault" ux:Value="#2A4F62" />
+	<float4 ux:Global="ColorThemeLight" ux:Value="#597994" />
+	<float4 ux:Global="ColorThemeVeryLight" ux:Value="#A5B9C9" />
+
+	<float4 ux:Global="FontColorThemeDark" ux:Value="#000B14" />
+	<float4 ux:Global="FontColorThemeLight" ux:Value="#C6D2DD" />
+
+	<!-- Side rotating panel subclasses (from fuse example project) -->
+	<Image ux:Class="Icon" StretchDirection="DownOnly" StretchMode="Uniform" Margin="1" />
+
+	<Icon ux:Class="AddWordIcon">
+		<MultiDensityImageSource>
+			<FileImageSource File="Assets/temp_icon@1x.png" Density="1" />
+			<FileImageSource File="Assets/temp_icon@2x.png" Density="2" />
+		</MultiDensityImageSource>
+	</Icon>
+	<Icon ux:Class="WordListIcon">
+		<MultiDensityImageSource>
+			<FileImageSource File="Assets/temp_icon@1x.png" Density="1" />
+			<FileImageSource File="Assets/temp_icon@2x.png" Density="2" />
+		</MultiDensityImageSource>
+	</Icon>
+	<Icon ux:Class="AnalysisIcon">
+		<MultiDensityImageSource>
+			<FileImageSource File="Assets/temp_icon@1x.png" Density="1" />
+			<FileImageSource File="Assets/temp_icon@2x.png" Density="2" />
+		</MultiDensityImageSource>
+	</Icon>
+
+
+	<Panel ux:Class="SidebarIcon" ux:Name="self" Width="50" Height="50">
+		<Circle Layer="Overlay">
+			<Stroke Width="5">
+				<SolidColor Color="ColorThemeLight" />
+			</Stroke>
+		</Circle>
+
+		<Circle ux:Name="tapAnimationCircle" Layer="Overlay">
+			<Stroke ux:Name="tapAnimationStroke" Width="3">
+				<SolidColor Color="ColorThemeVeryLight" />
+			</Stroke>
+		</Circle>
+
+		<Tapped>
+			<Scale Target="tapAnimationCircle" Factor="5"
+				   Duration="0.5" Easing="QuarticOut"
+				   DurationBack="0" />
+
+			<Change tapAnimationCircle.Opacity="0"
+				    Duration="0.5" Easing="QuarticOut"
+				    DurationBack="0" />
+
+			<Change tapAnimationCircle.Smoothness="10"
+				    Duration="0.5" Easing="QuarticOut"
+				    DurationBack="0" />
+
+			<Change tapAnimationStroke.Width="0"
+				    Duration="0.5" Easing="ExponentialOut"
+				    DurationBack="0" />
+		</Tapped>
+	</Panel>
+
+	<StackPanel ux:Class="HamburgerIcon" Width="25" Height="21">
+		<Rectangle ux:Class="HamburgerPart" Margin="0,2" Height="3" CornerRadius="3" Color="White" />
+
+		<HamburgerPart />
+		<HamburgerPart />
+		<HamburgerPart />
+	</StackPanel>
+
+	<Panel ux:Class="CloseIcon" Width="25" Height="25">
+		<Rectangle ux:Class="CrossPart" Height="3" CornerRadius="3" Color="White" />
+		<CrossPart>
+			<Rotation Degrees="45" />
+		</CrossPart>
+		<CrossPart>
+			<Rotation Degrees="-45" />
+		</CrossPart>
+	</Panel>
+
+
+
+
+
+	<!-- main page subclasses -->
+	<StackPanel ux:Class="WordPanel" ux:Name="self" wordText="Empty" phoneticSignText="">
+		<string ux:Property="wordText" />
+		<string ux:Property="phoneticSignText" />
+		<Text Value="{ReadProperty self.wordText}" TextAlignment="Center" FontSize="40" Color="FontColorThemeLight"/>
+		<Text Value="[{ReadProperty self.phoneticSignText}]" TextAlignment="Center" FontSize="15" Color="FontColorThemeLight"/>
+	</StackPanel>
+		
+	<!-- example sentence display panel -->
+	<StackPanel ux:Class="ExpandViewPanel" ux:Name="self" PanelText="a mu mal" ButtonColor="ColorThemeLight">
+		<string ux:Property="PanelText" />
+		<float4 ux:Property="ButtonColor" />
+		<JavaScript>
+			var Observable = require("FuseJS/Observable"); 
+
+			var ViewPanelVisibility = Observable("Collapsed");
+
+			function onClick() {
+				ViewPanelVisibility.value = "Visible";
+			}
+
+			module.exports = {
+				ViewPanelVisibility: ViewPanelVisibility,
+				onClick: onClick
+			};
+		</JavaScript>
+
+		<Button Padding="10, 0, 10, 0" Clicked="{onClick}">
+			<Image Source="ExpandButton" Color="{Property self.ButtonColor}" />
+		</Button>
+		<Panel ux:Name="ViewPanel" Margin="10, 10, 10, 10" Visibility="{ViewPanelVisibility}">
+			<Text Value="{ReadProperty self.PanelText}" TextAlignment="Center" Color="ColorThemeVeryLight" FontSize="16" TextWrapping="Wrap" />
+		</Panel>
+		
+	</StackPanel>
+
+	<!-- ================================================ -->
+
+	<JavaScript File="MainView.js" />
+
+	<ClientPanel>
+		<DockPanel>
+			<BottomBarBackground Dock="Bottom" />
+
+			<DockPanel>
+				<WhileTrue ux:Name="showMenu">
+					<Rotate Target="content" Degrees="-45"
+							Duration="0.45"    Easing="ExponentialInOut"
+							DurationBack="0.6" EasingBack="BounceIn" />
+
+					<Rotate Target="menuButton" Degrees="-90"
+							Duration="0.45"    Easing="ExponentialInOut"
+							DurationBack="0.6" EasingBack="BounceIn" />
+
+					<Move Target="addWordButton" X="120"
+						Delay="0.3"   Duration="0.6"     Easing="ElasticOut"
+						DelayBack="0" DurationBack="0.3" EasingBack="QuarticInOut" />
+
+					<Move Target="wordListButton" X="150"
+						Delay="0.32"  Duration="0.65"    Easing="ElasticOut"
+						DelayBack="0" DurationBack="0.3" EasingBack="QuarticInOut" />
+
+					<Move Target="analysisButton" X="180"
+						Delay="0.34"  Duration="0.7"     Easing="ElasticOut"
+						DelayBack="0" DurationBack="0.3" EasingBack="QuarticInOut" />
+
+					<Change statusBarConfig.IsVisible="false" Delay=".25" />
+				</WhileTrue>
+
+				<Panel ux:Name="menuButton" Width="170" Height="170" Alignment="TopLeft" Offset="-85,-85" Padding="40">
+					<Circle Layer="Background">
+						<SolidColor Color="ColorThemeDark" />
+					</Circle>
+					<HamburgerIcon Alignment="BottomRight"/>
+					<CloseIcon Alignment="BottomLeft" />
+
+					<Clicked><Toggle Target="showMenu" /></Clicked>
+				</Panel>
+
+				<Panel Dock="Top">
+					<iOS>
+						<Panel ux:Name="statusBarBackground" Height="20" />
+					</iOS>
+
+					<Android>
+						<StatusBarBackground />
+					</Android>
+				</Panel>
+
+				<!-- === Content panel === -->
+				<Panel ux:Name="content" TransformOrigin="TopLeft">
+
+					<Page ux:Class="WordCard" ux:Name="self">
+						<EnteringAnimation>
+							<Move X="-1" Easing="ExponentialInOut" RelativeTo="ParentSize" />
+						</EnteringAnimation>
+						<ExitingAnimation>
+							<Scale Factor="0.95" />
+							<Change self.Opacity="0.75" />
+						</ExitingAnimation>
+
+						<SwipeGesture ux:Name="IKnowSwipe" Direction="Down" Type="Active" />
+						<SwipingAnimation Source="IKnowSwipe">
+							<Move Target="WordViewPanel" Y="1" RelativeNode="KnowingConfirmPanel" RelativeTo="Size" Easing="ExponentialInOut" Duration="0.3" />
+							<Change KnowingConfirmPanel.Opacity="1" Duration="0.5" />
+						</SwipingAnimation>
+						<Swiped Source="IKnowSwipe">
+							<Callback Handler="{onConfirmKnowing}" />
+						</Swiped>
+
+						<Panel ux:Name="WordViewPanel">
+							<StackPanel Alignment="HorizontalCenter" Padding="0, 200, 0, 50">
+								<WordPanel wordText="{word}" phoneticSignText="{phoneticSign}" Margin="0, 0, 0, 30"/>
+								<ExpandViewPanel PanelText="{example}" ButtonColor="ColorThemeLight" Margin="0, 0, 0, 10"/>
+								<ExpandViewPanel PanelText="{meaning}" ButtonColor="ColorThemeLight"/>
+							</StackPanel>
+							<SolidColor Color="ColorThemeDefault" />
+						</Panel>
+
+						<Panel ux:Name="KnowingConfirmPanel" Alignment="Top" Opacity="0">
+							<Text Color="FontColorThemeDark" FontSize="30" TextAlignment="Center" Margin="0, 20, 0, 20">
+								I Know This!
+							</Text>
+							<SolidColor Color="ColorThemeVeryLight" />
+						</Panel>
+					</Page>
+
+					<PageControl Active="{currentPage}" Transition="None">
+						<Each Items="{wordList}">
+							<WordCard />
+						</Each>
+						<SolidColor Color="ColorThemeSuperDark" />
+					</PageControl>
+				</Panel>
+				<!-- ====================== -->
+
+				<!-- === sidebar panel === -->
+				<StackPanel ux:Name="sidebar" Offset="-130,0" Alignment="BottomLeft" Margin="0,0,0,50">
+					<DockPanel ux:Class="IconAndLabel" ux:Name="self" Margin="30">
+						<string ux:Property="Text" />
+						<Text Color="ColorThemeVeryLight" FontSize="14" Alignment="HorizontalCenter" Margin="0,10,0,0" Dock="Bottom" Font="RobotoBold" Value="{ReadProperty self.Text}" />
+					</DockPanel>
+
+					<IconAndLabel ux:Name="addWordButton" Text="ADD WORD">
+						<SidebarIcon>
+							<AddWordIcon />
+						</SidebarIcon>
+
+						<Clicked>
+							<Set showMenu.Value="false" />
+						</Clicked>
+					</IconAndLabel>
+
+					<IconAndLabel ux:Name="wordListButton" Text="SHOW LIST">
+						<SidebarIcon>
+							<WordListIcon />
+						</SidebarIcon>
+
+						<Clicked>
+							<Set showMenu.Value="false" />
+						</Clicked>
+					</IconAndLabel>
+
+					<IconAndLabel ux:Name="analysisButton" Text="ANALYSIS">
+						<SidebarIcon>
+							<AnalysisIcon />
+						</SidebarIcon>
+
+						<Clicked>
+							<Set showMenu.Value="false" />
+						</Clicked>
+					</IconAndLabel>
+				</StackPanel>
+				<!-- ==================== -->
+			</DockPanel>
+		</DockPanel>
+
+		<!-- very behind background rectangle -->
+		<SolidColor Color="ColorThemeSuperDark" />
+	</ClientPanel>
+</App>
