@@ -203,9 +203,9 @@
 						</Swiped>
 
 						<Panel ux:Name="WordViewPanel">
-							<StackPanel Alignment="HorizontalCenter" Padding="0, 200, 0, 50">
-								<WordPanel wordText="{word}" phoneticSignText="{phoneticSign}" Margin="0, 0, 0, 30"/>
-								<ExpandViewPanel PanelText="{example}" ButtonColor="ColorThemeLight" Margin="0, 0, 0, 10"/>
+							<StackPanel Alignment="HorizontalCenter" Padding="0, 200, 0, 50" ItemSpacing="30">
+								<WordPanel wordText="{word}" phoneticSignText="{phoneticSign}"/>
+								<ExpandViewPanel PanelText="{example}" ButtonColor="ColorThemeLight"/>
 								<ExpandViewPanel PanelText="{meaning}" ButtonColor="ColorThemeLight"/>
 							</StackPanel>
 							<SolidColor Color="ColorThemeDefault" />
@@ -218,6 +218,21 @@
 							<SolidColor Color="ColorThemeVeryLight" />
 						</Panel>
 					</Page>
+
+					<WhileEmpty Items="{wordList}">
+						<StackPanel ux:Name="emptyView" Alignment="Center" ItemSpacing="20">
+							<Text Alignment="Center" FontSize="20">How smart you are!</Text>
+							<Text Alignment="Center">You memorize every words you added</Text>
+
+							<AddingAnimation>
+								<Change emptyView.Opacity="0" Duration="0.2" />
+								<Scale Factor="0.4" Duration="0.4" Easing="CubicInOut" />
+							</AddingAnimation>                
+							<RemovingAnimation>
+								<Change emptyView.Opacity="0" Duration="0.2" />
+							</RemovingAnimation>
+						</StackPanel>
+					</WhileEmpty>
 
 					<PageControl Active="{currentPage}" Transition="None">
 						<Each Items="{wordList}">
