@@ -18,15 +18,23 @@
     <Router ux:Name="router" />
 
     <JavaScript>
+        var Observable = require("FuseJS/Observable");
+        var isShowingMenu = Observable(false);
+
         module.exports = {
+            isShowingMenu: isShowingMenu,
             gotoWordView: function() {
-                showMenu.value = false;
+                isShowingMenu.value = false;
                 router.goto("wordViewPage");
             },
             gotoAddWord: function() {
-                showMenu.value = false;
+                isShowingMenu.value = false;
                 router.goto("addWordPage");
             },
+            gotoAnalysis: function() {
+                isShowingMenu.value = false;
+                console.log("not implemented");
+            }
         };
     </JavaScript>
 
@@ -35,7 +43,7 @@
             <BottomBarBackground Dock="Bottom" />
 
             <DockPanel>
-                <WhileTrue ux:Name="showMenu">
+                <WhileTrue ux:Name="showMenu" Value="{isShowingMenu}">
                     <Rotate Target="content" Degrees="-45"
                             Duration="0.45"    Easing="ExponentialInOut"
                             DurationBack="0.6" EasingBack="BounceIn" />
@@ -97,9 +105,9 @@
 
                     <IconAndLabel ux:Name="addWordButton" Text="ADD WORD" Clicked="{gotoAddWord}" IconImgFile="Assets/temp_sidebar_icon.png" />
 
-                    <IconAndLabel ux:Name="wordListButton" Text="SHOW LIST" Clicked="{gotoAddWord}" IconImgFile="Assets/temp_sidebar_icon.png"  />
+                    <IconAndLabel ux:Name="wordListButton" Text="SHOW LIST" Clicked="{gotoWordView}" IconImgFile="Assets/temp_sidebar_icon.png"  />
                         
-                    <IconAndLabel ux:Name="analysisButton" Text="ANALYSIS" Clicked="{gotoAddWord}" IconImgFile="Assets/temp_sidebar_icon.png" />
+                    <IconAndLabel ux:Name="analysisButton" Text="ANALYSIS" Clicked="{gotoAnalysis}" IconImgFile="Assets/temp_sidebar_icon.png" />
                 </StackPanel>
                 <!-- ==================== -->
             </DockPanel>
