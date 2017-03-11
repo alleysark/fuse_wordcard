@@ -52,7 +52,7 @@
                         
                         <!-- example sentence -->
                         <Panel Margin="10, 10, 10, 10">
-                            <Text Value="{example}" TextAlignment="Center" Color="ColorThemeVeryLight" FontSize="16" TextWrapping="Wrap" />
+                            <Text Value="{example}" TextAlignment="Center" Color="FontColorThemeLight" FontSize="16" TextWrapping="Wrap" />
                         </Panel>
 
                         <!-- meaning display panel. collapsed by default -->
@@ -61,7 +61,7 @@
                                 <Image File="../../Assets/ViewExpandButton.png" Color="ColorThemeLight" />
                             </Button>
                             <Panel ux:Name="meaningTextPanel" Margin="10, 10, 10, 10" Opacity="0">
-                                <Text Value="{meaning}" TextAlignment="Center" Color="ColorThemeVeryLight" FontSize="16" TextWrapping="Wrap" />
+                                <Text Value="{meaning}" TextAlignment="Center" Color="FontColorThemeLight" FontSize="16" TextWrapping="Wrap" />
                             </Panel>
                             <WhileTrue Value="{isShowMeaning}">
                                 <Change meaningTextPanel.Opacity="1" Duration="0.1" />
