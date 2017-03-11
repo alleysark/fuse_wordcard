@@ -1,0 +1,7 @@
+<StackPanel ux:Class="HamburgerIcon" Width="25" Height="21">
+    <Rectangle ux:Class="HamburgerPart" Margin="0,2" Height="3" CornerRadius="3" Color="White" />
+
+    <HamburgerPart />
+    <HamburgerPart />
+    <HamburgerPart />
+</StackPanel>

@@ -1,0 +1,111 @@
+<App>
+    
+	<Font File="Assets/fonts/Roboto-Bold.ttf" ux:Global="RobotoBold"/>
+
+	<float4 ux:Global="ColorThemeSuperDark" ux:Value="#020E1C" />
+	<float4 ux:Global="ColorThemeVeryDark" ux:Value="#011321" />
+	<float4 ux:Global="ColorThemeDark" ux:Value="#0B2C47" />
+	<float4 ux:Global="ColorThemeDefault" ux:Value="#2A4F62" />
+	<float4 ux:Global="ColorThemeLight" ux:Value="#597994" />
+	<float4 ux:Global="ColorThemeVeryLight" ux:Value="#A5B9C9" />
+
+	<float4 ux:Global="FontColorThemeDark" ux:Value="#000B14" />
+	<float4 ux:Global="FontColorThemeLight" ux:Value="#C6D2DD" />
+
+    <Fuse.iOS.StatusBarConfig ux:Name="statusBarConfig" Style="Light" IsVisible="true" Animation="Slide" />
+    <Android.StatusBarConfig Color="ColorThemeVeryLight" />
+
+    <Router ux:Name="router" />
+
+    <JavaScript>
+        module.exports = {
+            gotoWordView: function() {
+                showMenu.value = false;
+                router.goto("wordViewPage");
+            },
+            gotoAddWord: function() {
+                showMenu.value = false;
+                router.goto("addWordPage");
+            },
+        };
+    </JavaScript>
+
+    <ClientPanel>
+        <DockPanel>
+            <BottomBarBackground Dock="Bottom" />
+
+            <DockPanel>
+                <WhileTrue ux:Name="showMenu">
+                    <Rotate Target="content" Degrees="-45"
+                            Duration="0.45"    Easing="ExponentialInOut"
+                            DurationBack="0.6" EasingBack="BounceIn" />
+
+                    <Rotate Target="menuButton" Degrees="-90"
+                            Duration="0.45"    Easing="ExponentialInOut"
+                            DurationBack="0.6" EasingBack="BounceIn" />
+
+                    <Move Target="addWordButton" X="120"
+                        Delay="0.3"   Duration="0.6"     Easing="ElasticOut"
+                        DelayBack="0" DurationBack="0.3" EasingBack="QuarticInOut" />
+
+                    <Move Target="wordListButton" X="150"
+                        Delay="0.32"  Duration="0.65"    Easing="ElasticOut"
+                        DelayBack="0" DurationBack="0.3" EasingBack="QuarticInOut" />
+
+                    <Move Target="analysisButton" X="180"
+                        Delay="0.34"  Duration="0.7"     Easing="ElasticOut"
+                        DelayBack="0" DurationBack="0.3" EasingBack="QuarticInOut" />
+
+                    <Change statusBarConfig.IsVisible="false" Delay=".25" />
+                </WhileTrue>
+
+                <Panel ux:Name="menuButton" Width="170" Height="170" Alignment="TopLeft" Offset="-85,-85" Padding="40">
+                    <Circle Layer="Background">
+                        <SolidColor Color="ColorThemeDark" />
+                    </Circle>
+                    <HamburgerIcon Alignment="BottomRight"/>
+                    <CloseIcon Alignment="BottomLeft" />
+
+                    <Clicked><Toggle Target="showMenu" /></Clicked>
+                </Panel>
+
+                <Panel Dock="Top">
+                    <iOS>
+                        <Panel ux:Name="statusBarBackground" Height="20" />
+                    </iOS>
+
+                    <Android>
+                        <StatusBarBackground />
+                    </Android>
+                </Panel>
+
+                <!-- === Content panel === -->
+                <Navigator ux:Name="content" TransformOrigin="TopLeft" DefaultPath="wordViewPage">
+                    <MainWordViewPage ux:Template="wordViewPage" router="router" />
+                    <AddWordPage ux:Template="addWordPage" router="router" />
+                </Navigator>
+                <!-- ====================== -->
+
+                <!-- === sidebar panel === -->
+                <StackPanel ux:Name="sidebar" Offset="-130,0" Alignment="BottomLeft" Margin="0,0,0,50">
+                    <DockPanel ux:Class="IconAndLabel" ux:Name="self" Margin="30">
+                        <string ux:Property="Text" />
+                        <FileSource ux:Property="IconImgFile" />
+                        <Text Color="ColorThemeVeryLight" FontSize="14" Alignment="HorizontalCenter" Margin="0,10,0,0" Dock="Bottom" Font="RobotoBold" Value="{ReadProperty self.Text}" />
+                        <SidebarIcon IconImgFile="{ReadProperty self.IconImgFile}" />
+                    </DockPanel>
+
+                    <IconAndLabel ux:Name="addWordButton" Text="ADD WORD" Clicked="{gotoAddWord}" IconImgFile="Assets/temp_sidebar_icon.png" />
+
+                    <IconAndLabel ux:Name="wordListButton" Text="SHOW LIST" Clicked="{gotoAddWord}" IconImgFile="Assets/temp_sidebar_icon.png"  />
+                        
+                    <IconAndLabel ux:Name="analysisButton" Text="ANALYSIS" Clicked="{gotoAddWord}" IconImgFile="Assets/temp_sidebar_icon.png" />
+                </StackPanel>
+                <!-- ==================== -->
+            </DockPanel>
+        </DockPanel>
+
+        <!-- very behind background rectangle -->
+        <SolidColor Color="ColorThemeSuperDark" />
+    </ClientPanel>
+</App>

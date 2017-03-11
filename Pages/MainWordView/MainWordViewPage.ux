@@ -1,0 +1,84 @@
+<Panel ux:Class="MainWordViewPage">
+    <Router ux:Dependency="router" />
+
+    <JavaScript File="MainWordViewPage.js" />
+
+    <WhileEmpty Items="{wordList}">
+        <StackPanel ux:Name="emptyView" Alignment="Center" ItemSpacing="20">
+            <Text Alignment="Center" FontSize="20">How smart you are!</Text>
+            <Text Alignment="Center">You memorize every words you added</Text>
+
+            <AddingAnimation>
+                <Change emptyView.Opacity="0" Duration="0.2" />
+                <Scale Factor="0.4" Duration="0.4" Easing="CubicInOut" />
+            </AddingAnimation>                
+            <RemovingAnimation>
+                <Change emptyView.Opacity="0" Duration="0.2" />
+            </RemovingAnimation>
+        </StackPanel>
+    </WhileEmpty>
+
+    <PageControl Active="{currentPage}" Transition="None">
+        <Each Items="{wordList}">
+            <Page ux:Name="wordCardPage">
+                <EnteringAnimation>
+                    <Move X="-1" Easing="ExponentialInOut" RelativeTo="ParentSize" />
+                </EnteringAnimation>
+                <ExitingAnimation>
+                    <Scale Factor="0.95" />
+                    <Change wordCardPage.Opacity="0.75" />
+                </ExitingAnimation>
+
+                <SwipeGesture ux:Name="IKnowSwipe" Direction="Down" Type="Active" />
+                <SwipingAnimation Source="IKnowSwipe">
+                    <Move Target="WordViewPanel" Y="1" RelativeNode="KnowingConfirmPanel" RelativeTo="Size" Easing="ExponentialInOut" Duration="0.3" />
+                    <Change KnowingConfirmPanel.Opacity="1" Duration="0.5" />
+                </SwipingAnimation>
+                <Swiped Source="IKnowSwipe">
+                    <Callback Handler="{onConfirmKnowing}" />
+                </Swiped>
+
+                <Activated>
+                    <Callback Handler="{onWordPageActivated}" />
+                </Activated>
+
+                <Panel ux:Name="WordViewPanel">
+                    <StackPanel Alignment="HorizontalCenter" Padding="0, 200, 0, 50" ItemSpacing="30">
+                        <!-- word spelling -->
+                        <StackPanel>
+                            <Text Value="{word}" TextAlignment="Center" FontSize="40" Color="FontColorThemeLight"/>
+                            <Text Value="[{phoneticSign}]" TextAlignment="Center" FontSize="15" Color="FontColorThemeLight"/>
+                        </StackPanel>
+                        
+                        <!-- example sentence -->
+                        <Panel Margin="10, 10, 10, 10">
+                            <Text Value="{example}" TextAlignment="Center" Color="ColorThemeVeryLight" FontSize="16" TextWrapping="Wrap" />
+                        </Panel>
+
+                        <!-- meaning display panel. collapsed by default -->
+                        <StackPanel>
+                            <Button Padding="10, 0, 10, 0" Clicked="{onClickMeaningPanel}">
+                                <Image File="../../Assets/ViewExpandButton.png" Color="ColorThemeLight" />
+                            </Button>
+                            <Panel ux:Name="meaningTextPanel" Margin="10, 10, 10, 10" Opacity="0">
+                                <Text Value="{meaning}" TextAlignment="Center" Color="ColorThemeVeryLight" FontSize="16" TextWrapping="Wrap" />
+                            </Panel>
+                            <WhileTrue Value="{isShowMeaning}">
+                                <Change meaningTextPanel.Opacity="1" Duration="0.1" />
+                            </WhileTrue>
+                        </StackPanel>
+                    </StackPanel>
+                    <SolidColor Color="ColorThemeDefault" />
+                </Panel>
+
+                <Panel ux:Name="KnowingConfirmPanel" Alignment="Top" Opacity="0">
+                    <Text Color="FontColorThemeDark" FontSize="30" TextAlignment="Center" Margin="0, 20, 0, 20">
+                        I Know This!
+                    </Text>
+                    <SolidColor Color="ColorThemeVeryLight" />
+                </Panel>
+            </Page>
+        </Each>
+        <SolidColor Color="ColorThemeSuperDark" />
+    </PageControl>
+</Panel>

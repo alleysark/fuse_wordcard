@@ -1,0 +1,9 @@
+<Panel ux:Class="CloseIcon" Width="25" Height="25">
+    <Rectangle ux:Class="CrossPart" Height="3" CornerRadius="3" Color="White" />
+    <CrossPart>
+        <Rotation Degrees="45" />
+    </CrossPart>
+    <CrossPart>
+        <Rotation Degrees="-45" />
+    </CrossPart>
+</Panel>

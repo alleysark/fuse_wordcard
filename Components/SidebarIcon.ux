@@ -1,0 +1,36 @@
+<!-- Side rotating panel subclasses (from fuse example project) -->
+<Panel ux:Class="SidebarIcon" ux:Name="self" Width="50" Height="50">
+    <FileSource ux:Property="IconImgFile" />
+
+    <Circle Layer="Overlay">
+        <Stroke Width="5">
+            <SolidColor Color="ColorThemeLight" />
+        </Stroke>
+    </Circle>
+
+    <Circle ux:Name="tapAnimationCircle" Layer="Overlay">
+        <Stroke ux:Name="tapAnimationStroke" Width="3">
+            <SolidColor Color="ColorThemeVeryLight" />
+        </Stroke>
+    </Circle>
+
+    <Tapped>
+        <Scale Target="tapAnimationCircle" Factor="5"
+                Duration="0.5" Easing="QuarticOut"
+                DurationBack="0" />
+
+        <Change tapAnimationCircle.Opacity="0"
+                Duration="0.5" Easing="QuarticOut"
+                DurationBack="0" />
+
+        <Change tapAnimationCircle.Smoothness="10"
+                Duration="0.5" Easing="QuarticOut"
+                DurationBack="0" />
+
+        <Change tapAnimationStroke.Width="0"
+                Duration="0.5" Easing="ExponentialOut"
+                DurationBack="0" />
+    </Tapped>
+
+    <Image StretchDirection="DownOnly" StretchMode="Uniform" Margin="1" File="{ReadProperty self.IconImgFile}" />
+</Panel>

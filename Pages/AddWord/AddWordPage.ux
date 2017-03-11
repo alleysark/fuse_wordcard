@@ -1,0 +1,9 @@
+<Panel ux:Class="AddWordPage">
+    <Router ux:Dependency="router" />
+
+    <JavaScript File="AddWordPage.js" />
+
+    <Text TextAlignment="Center">
+        This is Add Word page.
+    </Text>
+</Panel>

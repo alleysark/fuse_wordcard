@@ -8,6 +8,8 @@
   	"Orientations": "Portrait"
   },
   "Includes": [
-    "*"
+    "**.ux:UXFile",
+    "*.js:Bundle",
+    "assets/*:Bundle"
   ]
 }
