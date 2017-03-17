@@ -64,8 +64,18 @@ function confirmWordKnowing(word, withoutShowMeaning) {
     });
 }
 
+function addWord(word, phoneticSign, example, meaning) {
+    wordListDB.push({
+        word: word,
+        phoneticSign: phoneticSign,
+        example: example,
+        meaning: meaning
+    });
+}
+
 module.exports = {
     getMainWordList: getMainWordList,
     updateWordView: updateWordView,
-    confirmWordKnowing: confirmWordKnowing
+    confirmWordKnowing: confirmWordKnowing,
+    addWord: addWord
 }

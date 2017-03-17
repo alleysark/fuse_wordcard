@@ -3,7 +3,52 @@
 
     <JavaScript File="AddWordPage.js" />
 
-    <Text TextAlignment="Center">
-        This is Add Word page.
-    </Text>
+    <Panel>
+        <TextInput ux:Name="SearchBox" Value="{newWord}" Alignment="Center" 
+            FontSize="25" TextColor="FontColorThemeDark"
+            ValueChanged="{onSearchBoxChanged}"
+            PlaceholderText="word" PlaceholderColor="#CCC"
+            MaxLength="32" Width="200" Height="30">
+            <Rectangle Layer="Background" CornerRadius="3" Width="width(SearchBox)+5" Height="height(SearchBox)+5">
+                <Stroke Width="1" Color="#CCC" />
+                <SolidColor Color="White" />
+            </Rectangle>
+        </TextInput>
+        
+        <TextInput ux:Class="EditableTextBox" ux:Name="self">
+            <Rectangle ux:Name="BgRect" Layer="Background" CornerRadius="3" Width="width(self)+5" Height="height(self)+5" Opacity="0">
+                <Stroke Width="1" Color="#CCC" />
+                <SolidColor Color="White" />
+            </Rectangle>
+
+            <WhileTrue Value="{self.IsEnabled}">
+                <Change BgRect.Opacity="1" />
+            </WhileTrue>
+        </TextInput>
+
+        <!-- new word input box -->
+        <StackPanel ux:Name="SearchResultPanel" Visibility="Hidden" Opacity="0" Alignment="HorizontalCenter" Padding="0, 200, 0, 50" ItemSpacing="30">
+            <!-- word spelling -->
+            <EditableTextBox Value="{newPhoneticSign}" TextAlignment="Center" FontSize="15" TextColor="FontColorThemeLight" MaxLength="50"
+                    PlaceholderText="phonetic sign" PlaceholderColor="FontColorThemeDark" />
+
+            <!-- example sentence -->
+            <EditableTextBox Value="{newExample}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight"
+                PlaceholderText="example sentence" PlaceholderColor="FontColorThemeDark" />
+
+            <!-- meaning display panel -->
+            <EditableTextBox Value="{newMeaning}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight"
+                PlaceholderText="meaning" PlaceholderColor="FontColorThemeDark" />
+
+            <Button Text="Add" Clicked="{onClickAddWord}" />
+        </StackPanel>
+
+        <WhileTrue ux:Name="ShowResults" Value="{hasResults}">
+            <Move Target="SearchBox" Y="-200" Duration="0.1" Easing="CubicInOut" />
+            <Change SearchResultPanel.Opacity="1" Duration="0.15" Easing="CubicInOut" />
+            <Change SearchResultPanel.Visibility="Visible" />
+        </WhileTrue>
+    </Panel>
+
+    <SolidColor Color="ColorThemeDefault" />
 </Panel>
