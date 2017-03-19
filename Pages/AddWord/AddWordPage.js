@@ -5,8 +5,8 @@ var Backend = require("Backend.js");
 
 var newWord = Observable("");
 var newPhoneticSign = Observable("");
-var newExample = Observable("");
-var newMeaning = Observable("");
+var newExample = Observable("empty example");
+var newMeaning = Observable("meaning");
 var hasResults = Observable(false);
 
 function onClickAddWord() {

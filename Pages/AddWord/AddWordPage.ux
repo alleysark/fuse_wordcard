@@ -8,43 +8,37 @@
             FontSize="25" TextColor="FontColorThemeDark"
             ValueChanged="{onSearchBoxChanged}"
             PlaceholderText="word" PlaceholderColor="#CCC"
-            MaxLength="32" Width="200" Height="30">
+            MaxLength="32" Width="200" Height="30" ClipToBounds="true"
+            TransformOrigin="Anchor" Anchor="50%,100%">
             <Rectangle Layer="Background" CornerRadius="3" Width="width(SearchBox)+5" Height="height(SearchBox)+5">
                 <Stroke Width="1" Color="#CCC" />
                 <SolidColor Color="White" />
             </Rectangle>
         </TextInput>
         
-        <TextInput ux:Class="EditableTextBox" ux:Name="self">
-            <Rectangle ux:Name="BgRect" Layer="Background" CornerRadius="3" Width="width(self)+5" Height="height(self)+5" Opacity="0">
-                <Stroke Width="1" Color="#CCC" />
-                <SolidColor Color="White" />
-            </Rectangle>
-
-            <WhileTrue Value="{self.IsEnabled}">
-                <Change BgRect.Opacity="1" />
-            </WhileTrue>
-        </TextInput>
-
         <!-- new word input box -->
-        <StackPanel ux:Name="SearchResultPanel" Visibility="Hidden" Opacity="0" Alignment="HorizontalCenter" Padding="0, 200, 0, 50" ItemSpacing="30">
-            <!-- word spelling -->
-            <EditableTextBox Value="{newPhoneticSign}" TextAlignment="Center" FontSize="15" TextColor="FontColorThemeLight" MaxLength="50"
-                    PlaceholderText="phonetic sign" PlaceholderColor="FontColorThemeDark" />
+        <DockPanel ux:Name="SearchResultPanel" Visibility="Hidden" Opacity="0" Alignment="Center" Width="80%" Height="70%">
+            <!-- word phonetic sign -->
+            <StackPanel Dock="Top" Margin="0, 10, 0, 0" Orientation="Horizontal" ContentAlignment="Center">
+                <Text Value="[" FontSize="15" Margin="0, 0, 3, 0" />
+                <TextInput Value="{newPhoneticSign}" TextAlignment="Center" FontSize="15" TextColor="FontColorThemeLight" MaxLength="50"
+                    ClipToBounds="true" PlaceholderText="phonetic sign" PlaceholderColor="FontColorThemeDark" />
+                <Text Value="]" FontSize="15" Margin="3, 0, 0, 0" />
+            </StackPanel>
 
             <!-- example sentence -->
-            <EditableTextBox Value="{newExample}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight"
-                PlaceholderText="example sentence" PlaceholderColor="FontColorThemeDark" />
+            <TextView Dock="Top" Value="{newExample}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight"
+                BoxSizing="Limit" LimitWidth="300" />
 
             <!-- meaning display panel -->
-            <EditableTextBox Value="{newMeaning}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight"
-                PlaceholderText="meaning" PlaceholderColor="FontColorThemeDark" />
+            <TextView Dock="Top" Value="{newMeaning}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight" />
 
             <Button Text="Add" Clicked="{onClickAddWord}" />
-        </StackPanel>
+            <SolidColor Color="#ababab" />
+        </DockPanel>
 
         <WhileTrue ux:Name="ShowResults" Value="{hasResults}">
-            <Move Target="SearchBox" Y="-200" Duration="0.1" Easing="CubicInOut" />
+            <Move Target="SearchBox" RelativeTo="Size" RelativeNode="SearchResultPanel" Y="-0.5" Duration="0.1" Easing="CubicInOut" />
             <Change SearchResultPanel.Opacity="1" Duration="0.15" Easing="CubicInOut" />
             <Change SearchResultPanel.Visibility="Visible" />
         </WhileTrue>
