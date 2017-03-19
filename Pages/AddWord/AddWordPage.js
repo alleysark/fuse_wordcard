@@ -2,20 +2,10 @@ var Observable = require("FuseJS/Observable");
 var Timer = require("FuseJS/Timer");
 var Backend = require("Backend.js");
 
-
 var newWord = Observable("");
-var newPhoneticSign = Observable("");
-var newExample = Observable("empty example");
-var newMeaning = Observable("meaning");
-var hasResults = Observable(false);
 
-function onClickAddWord() {
-    // validation check before request to add
-    newWordText = newWord.value.toLowerCase();
-
-    // request to add
-    Backend.addWord(newWordText, newPhoneticSign.value, newExample.value, newMeaning.value);
-}
+var showSearchResults = Observable(false);
+var searchResults = Observable();
 
 searchTimerID = -1;
 function onSearchBoxChanged() {
@@ -26,21 +16,66 @@ function onSearchBoxChanged() {
 
     if (newWord.value.length > 0) {
         searchTimerID = Timer.create(function() {
-            // request naver search
-            hasResults.value = true;
+            Backend.searchWord(
+                // query string
+                newWord.value, 
+                // onSuccess
+                function(results){
+                    showSearchResults.value = true;
+                    
+                    results.forEach(function(item, idx){
+                        
+                    });
+
+                    searchResults.clear();
+
+                    searchResults.addAll([
+                        {
+                            word: "apple",
+                            meaning: "asdf",
+                            phoneticSign: "phonetic",
+                            example: "this is example"
+                        },
+                        {
+                            word: "apple",
+                            meaning: "asdf",
+                            phoneticSign: "phonetic",
+                            example: "this is example"
+                        },
+                        {
+                            word: "apple",
+                            meaning: "asdf",
+                            phoneticSign: "phonetic",
+                            example: "this is example"
+                        }
+                    ]);
+                },
+                // onFailure
+                function(status) {
+                    // if failed, show result page with 'empty result' message.
+                    showSearchResults.value = true;
+                    searchResults = [];
+                }
+            );
         }, 1000, false);
     }
     else {
-        hasResults.value = false;
+        showSearchResults.value = false;
     }
+}
+
+function onAddWord(e) {
+    // validation check before request to add
+    console.log("add word " + e.data.word);
+    
+    // request to add
+    Backend.addWord(e.data.word, e.data.phoneticSign, e.data.example, e.data.meaning);
 }
 
 module.exports = {
     newWord: newWord,
-    newPhoneticSign: newPhoneticSign,
-    newExample: newExample,
-    newMeaning: newMeaning,
-    hasResults: hasResults,
-    onClickAddWord: onClickAddWord,
-    onSearchBoxChanged: onSearchBoxChanged
+    showSearchResults: showSearchResults,
+    onSearchBoxChanged: onSearchBoxChanged,
+    searchResults: searchResults,
+    onAddWord: onAddWord
 }

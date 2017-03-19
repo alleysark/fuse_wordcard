@@ -64,6 +64,37 @@ function confirmWordKnowing(word, withoutShowMeaning) {
     });
 }
 
+// search queried word from the online dictionary.
+//  - word: query string
+//  - onSuccess(resultsJsonData) callback function
+//  - onFailure(status) callback function
+function searchWord(word, onSuccess, onFailure) {
+    resultData = [
+        {
+            entryID: "detail-search entry ID",
+            word: "apple",
+            phoneticSign: "apl",
+            meanings: ["Sa-gwa"],
+            example: "an apple pie.",
+            audio_en_url: "",
+            audio_uk_url: ""
+        },
+        {
+            entryID: "detail-search entry ID",
+            word: "Apple",
+            phoneticSign: "",
+            meanings: ["[Brands]Apple"],
+            example: "",
+            audio_en_url: "",
+            audio_uk_url: ""
+        }
+    ];
+
+    if (onSuccess !== undefined) {
+        onSuccess(cloneJSONData(resultData));
+    }
+}
+
 function addWord(word, phoneticSign, example, meaning) {
     wordListDB.push({
         word: word,
@@ -77,5 +108,6 @@ module.exports = {
     getMainWordList: getMainWordList,
     updateWordView: updateWordView,
     confirmWordKnowing: confirmWordKnowing,
-    addWord: addWord
+    addWord: addWord,
+    searchWord: searchWord
 }

@@ -16,28 +16,49 @@
             </Rectangle>
         </TextInput>
         
-        <!-- new word input box -->
-        <DockPanel ux:Name="SearchResultPanel" Visibility="Hidden" Opacity="0" Alignment="Center" Width="80%" Height="70%">
-            <!-- word phonetic sign -->
-            <StackPanel Dock="Top" Margin="0, 10, 0, 0" Orientation="Horizontal" ContentAlignment="Center">
-                <Text Value="[" FontSize="15" Margin="0, 0, 3, 0" />
-                <TextInput Value="{newPhoneticSign}" TextAlignment="Center" FontSize="15" TextColor="FontColorThemeLight" MaxLength="50"
-                    ClipToBounds="true" PlaceholderText="phonetic sign" PlaceholderColor="FontColorThemeDark" />
-                <Text Value="]" FontSize="15" Margin="3, 0, 0, 0" />
-            </StackPanel>
+        <Panel ux:Name="SearchResultPanel" Visibility="Hidden" Opacity="0" Alignment="Center" Width="80%" Height="70%">
+            <ScrollView>
+                <StackPanel ItemSpacing="10">
+                    <Each Items="{searchResults}">
+                        <Panel>
+                            <StackPanel ux:Name="SearchResultWord">                            
+                                <!-- word -->
+                                <TextInput Value="{word}" TextAlignment="Left" FontSize="20" TextColor="FontColorThemeDark" MaxLength="32" ClipToBounds="true" />
+                                
+                                <!-- meanings -->
+                                <TextView Value="{meaning}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight" />
 
-            <!-- example sentence -->
-            <TextView Dock="Top" Value="{newExample}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight"
-                BoxSizing="Limit" LimitWidth="300" />
+                                <!-- speach -->
+                                <StackPanel Margin="0, 10, 0, 0" Orientation="Horizontal" >
+                                    <Text Value="[" FontSize="15" Margin="0, 0, 3, 0" />
+                                    <TextInput Value="{phoneticSign}" TextAlignment="Center" FontSize="15" TextColor="FontColorThemeLight" MaxLength="50" ClipToBounds="true" />
+                                    <Text Value="]" FontSize="15" Margin="3, 0, 0, 0" />
 
-            <!-- meaning display panel -->
-            <TextView Dock="Top" Value="{newMeaning}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight" />
+                                    <!-- audio -->
 
-            <Button Text="Add" Clicked="{onClickAddWord}" />
-            <SolidColor Color="#ababab" />
-        </DockPanel>
+                                </StackPanel>
 
-        <WhileTrue ux:Name="ShowResults" Value="{hasResults}">
+                                <!-- example sentence -->
+                                <TextView Value="{example}" TextAlignment="Center" FontSize="16" TextWrapping="Wrap" TextColor="FontColorThemeLight"
+                                    BoxSizing="Limit" LimitWidth="300" />
+
+                                <Rectangle Layer="Background" CornerRadius="3" Color="White" />
+                            </StackPanel>
+
+                            <SwipeGesture ux:Name="AddWordSwipe" Direction="Right" Type="Active" />
+                            <SwipingAnimation Source="AddWordSwipe">
+                                <Move Target="SearchResultWord" X="0.1" RelativeTo="Size" RelativeNode="SearchResultWord" Easing="ExponentialInOut" Duration="0.3" />
+                            </SwipingAnimation>
+                            <Swiped Source="AddWordSwipe">
+                                <Callback Handler="{onAddWord}" />
+                            </Swiped>
+                        </Panel>
+                    </Each>
+                </StackPanel>
+            </ScrollView>
+        </Panel>
+
+        <WhileTrue ux:Name="ShowResults" Value="{showSearchResults}">
             <Move Target="SearchBox" RelativeTo="Size" RelativeNode="SearchResultPanel" Y="-0.5" Duration="0.1" Easing="CubicInOut" />
             <Change SearchResultPanel.Opacity="1" Duration="0.15" Easing="CubicInOut" />
             <Change SearchResultPanel.Visibility="Visible" />
